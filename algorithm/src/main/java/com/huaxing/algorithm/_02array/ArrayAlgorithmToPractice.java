@@ -1,19 +1,11 @@
 package com.huaxing.algorithm._02array;
 
-import com.alibaba.fastjson.JSON;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static jdk.nashorn.internal.objects.Global.print;
-
 /**
  * @Description
  * @author: 姚广星
  * @time: 2020/12/20 16:35
  */
-public class ArrayTest {
+public class ArrayAlgorithmToPractice {
 
 
     public static void main(String[] args) {
