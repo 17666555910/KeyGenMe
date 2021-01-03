@@ -1,10 +1,13 @@
 package com.huaxing.algorithm._02array;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @Description
  * @author: 姚广星
  * @time: 2020/12/20 16:35
  */
+@Slf4j
 public class ArrayAlgorithmToPractice {
 
 
@@ -43,8 +46,8 @@ public class ArrayAlgorithmToPractice {
          * 示例 3:输入: [7,6,4,3,1]     输出: 0
          * 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
          */
-        int[] nums2 = {7,6,4,3,1};
-        int profit = ArrayAlgorithmToPractice.maxProfit(nums2);
+        int[] nums2 = {7, 1, 5, 3, 6, 4};
+        int profit = ArrayAlgorithmToPractice.maxProfit2(nums2);
         System.out.println("profit = " + profit);
         //---------------- 习题2:买卖股票的最佳时机（贪心算法） end -----------------------------
     }
@@ -64,15 +67,15 @@ public class ArrayAlgorithmToPractice {
         //定义一个慢指针
         int k = 0;
         //迭代循环快指针
-        for(int i=1;i<nums.length;i++){
+        for (int i = 1; i < nums.length; i++) {
             //如果快指针的值和慢指针的值不相等则说明为不重复的,则把值写入慢指针对应的数组元素中去
-            if(nums[i] != nums[k]){
+            if (nums[i] != nums[k]) {
                 k++;
-                nums[k]=nums[i];
+                nums[k] = nums[i];
             }
         }
         //移动慢指针
-        return k+1;
+        return k + 1;
     }
 
     /**
@@ -80,11 +83,12 @@ public class ArrayAlgorithmToPractice {
      * 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
      * 设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
      * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
-     *
+     * <p>
      * 作者：华星详谈
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2zsx1/
      * 来源：力扣（LeetCode）
      * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     *
      * @param prices
      * @return
      */
@@ -100,29 +104,50 @@ public class ArrayAlgorithmToPractice {
         int buying = 0;
         //是否有买入
         boolean isBuying = false;
-        for(int a=0;a<prices.length;a++){
-            if(a == prices.length-1){
-                if(isBuying){
-                    profit += prices[a]-buying;
-                    //清空数据
-                    buying = 0;
-                    isBuying = false;
+        for (int a = 0; a < prices.length; a++) {
+            if (a == prices.length - 1) {
+                if (isBuying) {
+                    profit += prices[a] - buying;
                 }
                 break;
             }
             //买入
-            if(!isBuying && prices[b] > prices[a]){
+            if (!isBuying && prices[b] > prices[a]) {
                 buying = prices[a];
                 isBuying = true;
             }
             //卖出
-            if(isBuying && prices[b] < prices[a]){
-                profit += prices[a]-buying;
+            if (isBuying && prices[b] < prices[a]) {
+                profit += prices[a] - buying;
                 //清空数据
                 buying = 0;
                 isBuying = false;
             }
             b++;
+        }
+        return profit;
+    }
+
+    /**
+     * TODO 买卖股票的最佳时机---> 优化之后的算法
+     * 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+     * 设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+     * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+     * <p>
+     * 作者：华星详谈
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2zsx1/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     *
+     * @param prices
+     * @return
+     */
+    public static int maxProfit2(int[] prices) {
+        //利润
+        int profit = 0;
+        for (int i = 1; i < prices.length; i++) {
+            //获取利润，当prices[i] - prices[i-1] > 0  时，说明有利可图
+            profit += Math.max(0, prices[i] - prices[i - 1]);
         }
         return profit;
     }
