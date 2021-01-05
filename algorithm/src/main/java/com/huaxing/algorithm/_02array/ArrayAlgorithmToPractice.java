@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @Description
@@ -75,11 +76,13 @@ public class ArrayAlgorithmToPractice {
          */
         nums = new int[]{1,2,3,1};
         System.out.println("习题4:存在重复元素 方式一: " + ArrayAlgorithmToPractice.containsDuplicate(nums));
+        System.out.println("习题4:存在重复元素 方式二: " + ArrayAlgorithmToPractice.containsDuplicate2(nums));
+        System.out.println("习题4:存在重复元素 方式二（优化版）: " + ArrayAlgorithmToPractice.containsDuplicate3(nums));
         //---------------- 习题4:存在重复元素 end -----------------------
     }
 
     /**
-     * TODO 存在重复元素  方式1：使用set集合的方式  LeetCode执行用时：5 ms
+     * TODO 存在重复元素  方式1：使用set集合的方式
      * 给定一个整数数组，判断是否存在重复元素。
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
      *
@@ -101,7 +104,7 @@ public class ArrayAlgorithmToPractice {
     }
 
     /**
-     * TODO 存在重复元素  方式2：排序之后判断相邻元素的是否相等     LeetCode执行用时：3 ms
+     * TODO 存在重复元素  方式2：排序之后判断相邻元素的是否相等
      * 给定一个整数数组，判断是否存在重复元素。
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
      *
@@ -120,6 +123,22 @@ public class ArrayAlgorithmToPractice {
             }
         }
         return false;
+    }
+
+    /**
+     * TODO 存在重复元素  方式2：排序之后判断相邻元素的是否相等(优化版-使用IntStream)
+     * 给定一个整数数组，判断是否存在重复元素。
+     * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
+     *
+     * 作者：华星详谈
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x248f5/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     * @param nums
+     * @return
+     */
+    public static boolean containsDuplicate3(int[] nums) {
+        return IntStream.of(nums).distinct().count() != nums.length;
     }
 
     /**
