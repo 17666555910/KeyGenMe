@@ -59,6 +59,7 @@ public class ArrayAlgorithmToPractice {
         System.out.println("profit = " + profit);
         //---------------- 习题2:买卖股票的最佳时机（贪心算法） end -----------------------------
 
+
         //---------------- 习题3:旋转数组（三种方式） begin ---------------------
         //方式1：直接旋转
         nums = new int[]{1, 2, 3, 4, 5, 6, 7};
@@ -67,6 +68,7 @@ public class ArrayAlgorithmToPractice {
         nums = new int[]{1, 2, 3, 4, 5, 6, 7};
         ArrayAlgorithmToPractice.rotate2(nums, 3);
         //---------------- 习题3:旋转数组（三种方式） end -----------------------
+
 
         //---------------- 习题4:存在重复元素 begin ---------------------
         /**
@@ -79,6 +81,8 @@ public class ArrayAlgorithmToPractice {
         System.out.println("习题4:存在重复元素 方式二: " + ArrayAlgorithmToPractice.containsDuplicate2(nums));
         System.out.println("习题4:存在重复元素 方式二（优化版）: " + ArrayAlgorithmToPractice.containsDuplicate3(nums));
         //---------------- 习题4:存在重复元素 end -----------------------
+
+
     }
 
     /**
