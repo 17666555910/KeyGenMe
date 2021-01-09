@@ -3,10 +3,7 @@ package com.huaxing.algorithm._02array;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -76,31 +73,90 @@ public class ArrayAlgorithmToPractice {
          * 示例 2:    输入: [1,2,3,4]   输出: false
          * 示例 3:    输入: [1,1,1,3,3,4,3,2,4,2]   输出: true
          */
-        nums = new int[]{1,2,3,1};
+        nums = new int[]{1, 2, 3, 1};
         System.out.println("习题4:存在重复元素 方式一: " + ArrayAlgorithmToPractice.containsDuplicate(nums));
         System.out.println("习题4:存在重复元素 方式二: " + ArrayAlgorithmToPractice.containsDuplicate2(nums));
         System.out.println("习题4:存在重复元素 方式二（优化版）: " + ArrayAlgorithmToPractice.containsDuplicate3(nums));
         //---------------- 习题4:存在重复元素 end -----------------------
 
+        //---------------- 习题5:只出现一次的数字 begin ------------------
+        /**
+         * 示例 1:    输入: [2,2,1]         输出: 1
+         * 示例 2:    输入: [4,1,2,1,2]     输出: 4
+         */
+        nums = new int[]{2, 2, 1};
+        System.out.println("习题5:只出现一次的数字 方式一: " + ArrayAlgorithmToPractice.singleNumber(nums));
+        System.out.println("习题5:只出现一次的数字 方式二: " + ArrayAlgorithmToPractice.singleNumber2(nums));
+        //---------------- 习题5:只出现一次的数字 end --------------------
 
+    }
+
+    /**
+     * TODO 只出现一次的数字   方式一：使用hashSet集合方式
+     * 说明：
+     * 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+     * <p>
+     * 作者：华星详谈
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x21ib6/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     *
+     * @param nums
+     * @return
+     */
+    public static int singleNumber(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (!set.add(num)) {
+                //添加不成功，则说明是重复的数据，则删除对应的元素
+                set.remove(num);
+            }
+        }
+        return set.isEmpty() ? -1 : set.iterator().next();
+    }
+
+    /**
+     * TODO 只出现一次的数字   方式二：分组取list长度为1
+     * 说明：
+     * 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
+     * <p>
+     * 作者：华星详谈
+     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x21ib6/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     *
+     * @param nums
+     * @return
+     */
+    public static int singleNumber2(int[] nums) {
+        List<Integer> list = Arrays.stream(nums).boxed().collect(Collectors.toList());
+        list = list.stream()
+                .collect(Collectors.groupingBy(value -> value))
+                .entrySet()
+                .stream()
+                .filter(i -> i.getValue().size() == 1)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        return list.isEmpty() ? -1 : list.get(0);
     }
 
     /**
      * TODO 存在重复元素  方式1：使用set集合的方式
      * 给定一个整数数组，判断是否存在重复元素。
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
-     *
+     * <p>
      * 作者：华星详谈
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x248f5/
      * 来源：力扣（LeetCode）
      * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     *
      * @param nums
      * @return
      */
     public static boolean containsDuplicate(int[] nums) {
         Set<Integer> set = new HashSet();
-        for(int i=0;i < nums.length;i++){
-            if(!set.add(nums[i])){
+        for (int i = 0; i < nums.length; i++) {
+            if (!set.add(nums[i])) {
                 return true;
             }
         }
@@ -111,18 +167,19 @@ public class ArrayAlgorithmToPractice {
      * TODO 存在重复元素  方式2：排序之后判断相邻元素的是否相等
      * 给定一个整数数组，判断是否存在重复元素。
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
-     *
+     * <p>
      * 作者：华星详谈
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x248f5/
      * 来源：力扣（LeetCode）
      * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     *
      * @param nums
      * @return
      */
     public static boolean containsDuplicate2(int[] nums) {
         Arrays.sort(nums);
-        for(int i=1;i <nums.length;i++){
-            if(nums[i-1] == nums[i]){
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i - 1] == nums[i]) {
                 return true;
             }
         }
@@ -133,11 +190,12 @@ public class ArrayAlgorithmToPractice {
      * TODO 存在重复元素  方式2：排序之后判断相邻元素的是否相等(优化版-使用IntStream)
      * 给定一个整数数组，判断是否存在重复元素。
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
-     *
+     * <p>
      * 作者：华星详谈
      * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x248f5/
      * 来源：力扣（LeetCode）
      * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     *
      * @param nums
      * @return
      */
