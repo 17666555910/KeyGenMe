@@ -1,8 +1,10 @@
 package com.huaxing.algorithm._02array;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -89,6 +91,148 @@ public class ArrayAlgorithmToPractice {
         System.out.println("习题5:只出现一次的数字 方式二: " + ArrayAlgorithmToPractice.singleNumber2(nums));
         //---------------- 习题5:只出现一次的数字 end --------------------
 
+        //---------------- 习题6:两个数组的交集 begin ------------------
+        /**
+         * 示例 1： 输入：nums1 = [1,2,2,1], nums2 = [2,2] 输出：[2,2]
+         * 示例 2： 输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4] 输出：[4,9]
+         */
+        nums = new int[]{4, 9, 5};
+        int[] nums2 = new int[]{9, 4, 9, 8, 4};
+        System.out.println("习题6:两个数组的交集 方式一: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect(nums, nums2)));
+        System.out.println("习题6:两个数组的交集 方式二: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect2(nums, nums2)));
+        System.out.println("习题6:两个数组的交集 方式二: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect3(nums, nums2)));
+        System.out.println("习题6:两个数组的交集 方式四: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect4(nums, nums2)));
+        //---------------- 习题6:两个数组的交集 end --------------------
+    }
+
+
+    /**
+     * TODO 两个数组的交集     方式一：使用Java8新特性
+     * 说明：
+     * 输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。
+     * 我们可以不考虑输出结果的顺序。
+     * <p>
+     * 作者：华星详谈
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public static int[] intersect(int[] nums1, int[] nums2) {
+        List<Integer> list1 = Arrays.stream(nums1).boxed().collect(Collectors.toList());
+        List<Integer> list2 = Arrays.stream(nums2).boxed().collect(Collectors.toList());
+        List<Integer> collect = list1.stream().filter(num -> list2.contains(num)).collect(Collectors.toList());
+        return collect.stream().sorted().mapToInt(Integer::valueOf).toArray();
+    }
+
+    /**
+     * TODO 两个数组的交集     方式二：使用hash表的方式
+     * 说明：
+     * 输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。
+     * 我们可以不考虑输出结果的顺序。
+     * <p>
+     * 作者：华星详谈
+     *
+     * @param nums1 长度较短的数组
+     * @param nums2 长度较长的数组
+     * @return
+     */
+    public static int[] intersect2(int[] nums1, int[] nums2) {
+        //为了使算法最优化，在最外层迭代数组长度较长的那个
+        if (nums1.length > nums2.length) {
+            return intersect2(nums2, nums1);
+        }
+        Set<Integer> set = new HashSet();
+        for (int num : nums2) {
+            for (int i : nums1) {
+                if (num == i) {
+                    set.add(i);
+                }
+            }
+        }
+        return set.stream().mapToInt(Integer::valueOf).toArray();
+    }
+
+    /**
+     * TODO 两个数组的交集     方式二：使用hash表的方式(优化版)
+     * 说明：
+     * 输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。
+     * 我们可以不考虑输出结果的顺序。
+     * <p>
+     * 作者：华星详谈
+     *
+     * @param nums1 长度较短的数组
+     * @param nums2 长度较长的数组
+     * @return
+     */
+    public static int[] intersect3(int[] nums1, int[] nums2) {
+        //为了使算法最优化，在最外层迭代数组长度较长的那个
+        if (nums1.length > nums2.length) {
+            return intersect3(nums2, nums1);
+        }
+        //定义一个map，存放每个元素出现的次数
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums2) {
+            int count = map.getOrDefault(num, 0) + 1;
+            map.put(num, count);
+        }
+
+        int index = 0;
+        int[] result = new int[nums1.length];
+        for (int num : nums1) {
+            int count = map.getOrDefault(num, 0);
+            if (count > 0) {
+                //说明该元素存在于num1、num2中
+                result[index++] = num;
+                //该元素已经放入result，自身减一
+                count--;
+                if (count > 0) {
+                    map.put(num, count);
+                } else {
+                    map.remove(num);
+                }
+            }
+        }
+        //返回index长度的排序集合
+        return Arrays.copyOfRange(result, 0, index);
+    }
+
+    /**
+     * TODO 两个数组的交集     方式三：使用排序后双指针的方式，(当num2长度过大，内存放不下是不适用) ps:执行时间耗时最少
+     * 说明：
+     * 输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。
+     * 我们可以不考虑输出结果的顺序。
+     * <p>
+     * 作者：华星详谈
+     *
+     * @param nums1 长度较短的数组
+     * @param nums2 长度较长的数组
+     * @return
+     */
+    public static int[] intersect4(int[] nums1, int[] nums2) {
+        //为了使算法最优化，在最外层迭代数组长度较长的那个
+        if (nums1.length > nums2.length) {
+            return intersect4(nums2, nums1);
+        }
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int length1 = nums1.length, length2 = nums2.length;
+        int index = 0, index1 = 0, index2 = 0;
+        int[] result = new int[Math.min(length1, length2)];
+        //当两个索引都比长度小时，才进入循环
+        while (index1 < length1 && index2 < length2) {
+            //元素较小的右移一位
+            if (nums1[index1] < nums2[index2]) {
+                index1++;
+            } else if (nums1[index1] > nums2[index2]) {
+                index2++;
+            } else {
+                result[index++] = nums1[index1];
+                index1++;
+                index2++;
+            }
+        }
+        return Arrays.copyOfRange(result, 0, index);
     }
 
     /**
@@ -97,9 +241,6 @@ public class ArrayAlgorithmToPractice {
      * 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x21ib6/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param nums
      * @return
@@ -121,9 +262,6 @@ public class ArrayAlgorithmToPractice {
      * 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x21ib6/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param nums
      * @return
@@ -146,9 +284,6 @@ public class ArrayAlgorithmToPractice {
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x248f5/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param nums
      * @return
@@ -169,9 +304,6 @@ public class ArrayAlgorithmToPractice {
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x248f5/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param nums
      * @return
@@ -192,9 +324,6 @@ public class ArrayAlgorithmToPractice {
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x248f5/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param nums
      * @return
@@ -214,9 +343,6 @@ public class ArrayAlgorithmToPractice {
      * 空间复杂度：O(1)。常数位的空间复杂度，没有额外的空间被使用
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2skh7/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param nums
      * @param k
@@ -250,9 +376,6 @@ public class ArrayAlgorithmToPractice {
      * 空间复杂度：O(1)。常数位的空间复杂度，没有额外的空间被使用
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2skh7/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param nums
      * @param k
@@ -292,9 +415,6 @@ public class ArrayAlgorithmToPractice {
      * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2gy9m/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      */
     private static int deleteArrayDuplicates(int[] nums) {
         //思路：使用双指针的方式
@@ -319,9 +439,6 @@ public class ArrayAlgorithmToPractice {
      * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2zsx1/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param prices
      * @return
@@ -369,9 +486,6 @@ public class ArrayAlgorithmToPractice {
      * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
      * <p>
      * 作者：华星详谈
-     * 链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/x2zsx1/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      *
      * @param prices
      * @return
