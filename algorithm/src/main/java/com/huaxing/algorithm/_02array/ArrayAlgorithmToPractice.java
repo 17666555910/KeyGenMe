@@ -144,6 +144,33 @@ public class ArrayAlgorithmToPractice {
         return result;
     }
 
+    /**
+     * TODO 加一  解题思路：digits[i]++ ,然后 digits[i] 取余 10，如果能够被整除，说明进一位，如果不能够被整除则直接返回
+     * 说明：
+     * 输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。
+     * 我们可以不考虑输出结果的顺序。
+     * <p>
+     * 作者：华星详谈
+     *
+     * @param digits
+     * @return
+     */
+    public static int[] plusOne2(int[] digits) {
+        //解题思路：digits[i]++ ,然后 digits[i] 取余 10，如果能够被整除，说明进一位，如果不能够被整除则直接返回
+        for (int i = digits.length - 1; i >= 0; i--) {
+            digits[i]++;
+            digits[i] %= 10;
+            if (digits[i] != 0) {
+                //说明不能够整除
+                return digits;
+            }
+        }
+        //处理特殊情况：最高位为9时
+        int[] result = new int[digits.length + 1];
+        result[0] = 1;
+        return result;
+    }
+
 
     /**
      * TODO 两个数组的交集     方式一：使用Java8新特性
