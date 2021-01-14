@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -103,6 +104,44 @@ public class ArrayAlgorithmToPractice {
         System.out.println("习题6:两个数组的交集 方式二: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect3(nums, nums2)));
         System.out.println("习题6:两个数组的交集 方式四: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect4(nums, nums2)));
         //---------------- 习题6:两个数组的交集 end --------------------
+
+        //---------------- 习题7:加一 begin ------------------
+        /**
+         * 示例 1：输入：digits = [1,2,3] 输出：[1,2,4] 解释：输入数组表示数字 123。
+         * 示例 2：输入：digits = [4,3,2,1]输出：[4,3,2,2] 解释：输入数组表示数字 4321。
+         * 示例 3：输入：digits = [0,0]输出：[0,1]
+         * 示例 4：输入：digits = [9,8,7,6,5,4,3,2,1,0]输出：[9,8,7,6,5,4,3,2,1,1]
+         */
+        nums = new int[]{7, 2, 8, 5, 0, 9, 1, 2, 9, 5, 3, 6, 6, 7, 3, 2, 8, 4, 3, 7, 9, 5, 7, 7, 4, 7, 4, 9, 4, 7, 0, 1, 1, 1, 7, 4, 0, 0, 6};
+        System.out.println("习题7:加一 方式一: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.plusOne(nums)));
+        //---------------- 习题7:加一 end --------------------
+    }
+
+    /**
+     * TODO 加一  解题思路：判断digits.length 是否为9 如果为9就改为1，继续循环digits.length-1，若为不等于9，则+1。最后处理特殊情况 99。
+     * 说明：
+     * 输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。
+     * 我们可以不考虑输出结果的顺序。
+     * <p>
+     * 作者：华星详谈
+     *
+     * @param digits
+     * @return
+     */
+    public static int[] plusOne(int[] digits) {
+        //解题思路：判断digits.length 是否为9 如果为9就改为1，继续循环digits.length-1，若为不等于9，则+1。最后处理特殊情况 99。
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (digits[i] == 9) {
+                digits[i] = 0;
+            } else {
+                digits[i]++;
+                return digits;
+            }
+        }
+        //处理最高位为9的情况
+        int[] result = new int[digits.length + 1];
+        result[0] = 1;
+        return result;
     }
 
 
