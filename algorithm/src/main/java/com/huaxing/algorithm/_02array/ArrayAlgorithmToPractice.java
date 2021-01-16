@@ -116,6 +116,38 @@ public class ArrayAlgorithmToPractice {
         System.out.println("习题7:加一 方式一: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.plusOne(nums)));
         System.out.println("习题7:加一 方式二: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.plusOne2(nums)));
         //---------------- 习题7:加一 end --------------------
+
+        //---------------- 习题8 移动零 begin ------------------
+        nums = new int[]{0, 1, 0, 3, 12};
+        ArrayAlgorithmToPractice.moveZeroes(nums);
+
+        //---------------- 习题8 移动零 end ------------------
+    }
+
+    /**
+     * TODO 移动零：使用双指针
+     * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+     * 说明:
+     * 必须在原数组上操作，不能拷贝额外的数组。
+     * 尽量减少操作次数。
+     * <p>
+     * 作者：华星详谈
+     *
+     * @return
+     */
+    public static void moveZeroes(int[] nums) {
+        int left = 0, right = 0;
+        while (left < nums.length) {
+            if (nums[left] != 0) {
+                if (left > right) {
+                    nums[right] = nums[left];
+                    nums[left] = 0;
+                }
+                right++;
+            }
+            left++;
+        }
+        System.out.println("习题8 移动零：使用双指针：" + JSONObject.toJSONString(nums));
     }
 
     /**
