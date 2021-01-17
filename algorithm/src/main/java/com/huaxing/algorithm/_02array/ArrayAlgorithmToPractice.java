@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -52,8 +50,8 @@ public class ArrayAlgorithmToPractice {
          * 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
          */
         nums = new int[]{7, 1, 5, 3, 6, 4};
-        int profit = ArrayAlgorithmToPractice.maxProfit2(nums);
-        System.out.println("profit = " + profit);
+        System.out.println("习题2:买卖股票的最佳时机: " + ArrayAlgorithmToPractice.maxProfit(nums));
+        System.out.println("习题2:买卖股票的最佳时机: (优化后的方法)" + ArrayAlgorithmToPractice.maxProfit2(nums));
         //---------------- 习题2:买卖股票的最佳时机（贪心算法） end -----------------------------
 
 
@@ -98,7 +96,7 @@ public class ArrayAlgorithmToPractice {
         int[] nums2 = new int[]{9, 4, 9, 8, 4};
         System.out.println("习题6:两个数组的交集 方式一: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect(nums, nums2)));
         System.out.println("习题6:两个数组的交集 方式二: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect2(nums, nums2)));
-        System.out.println("习题6:两个数组的交集 方式二: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect3(nums, nums2)));
+        System.out.println("习题6:两个数组的交集 方式三: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect3(nums, nums2)));
         System.out.println("习题6:两个数组的交集 方式四: " + JSONObject.toJSONString(ArrayAlgorithmToPractice.intersect4(nums, nums2)));
         //---------------- 习题6:两个数组的交集 end --------------------
 
@@ -458,6 +456,13 @@ public class ArrayAlgorithmToPractice {
      * @return
      */
     public static int[] intersect4(int[] nums1, int[] nums2) {
+        //解题思路：
+        // 1：先对数组进行排序
+        // 2：比较数组长度进行迭代，当两个索引都比长度小时，才进入循环
+        // 3：如果nums1[index1]、nums2[index2] 相等，则说明元素存在于num1和num2中，把该元素存放在新的数组中
+        // 4：如果nums1[index1]> nums2[index2]，index2++；
+        // 5：如果nums1[index1]< nums2[index2]，index1++；
+
         //为了使算法最优化，在最外层迭代数组长度较长的那个
         if (nums1.length > nums2.length) {
             return intersect4(nums2, nums1);
@@ -515,8 +520,7 @@ public class ArrayAlgorithmToPractice {
      * @return
      */
     public static int singleNumber2(int[] nums) {
-        List<Integer> list = Arrays.stream(nums).boxed().collect(Collectors.toList());
-        list = list.stream()
+        List<Integer> list = Arrays.stream(nums).boxed()
                 .collect(Collectors.groupingBy(value -> value))
                 .entrySet()
                 .stream()
