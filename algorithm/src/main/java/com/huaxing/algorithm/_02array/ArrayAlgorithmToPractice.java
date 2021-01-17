@@ -32,11 +32,8 @@ public class ArrayAlgorithmToPractice {
          */
         int[] nums = {1, 1, 2};
         int length = deleteArrayDuplicates(nums);
-        System.out.println("新的数组长度为 = " + length);
-        for (int i = 0; i < length; i++) {
-            int num = nums[i];
-            System.out.println("num元素 = " + num);
-        }
+        System.out.println("习题1:新的数组长度为 = " + length);
+        System.out.println("习题1:删除排序数组中的重复项: " + JSONObject.toJSONString(Arrays.copyOfRange(nums, 0, length)));
         //----------------- 习题1:删除排序数组中的重复项 end ------------------------------
 
         //---------------- 习题2:买卖股票的最佳时机（贪心算法） begin ---------------------------
